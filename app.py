@@ -20,8 +20,14 @@ def webhook():
         limite = (salario * 0.4) + (score * 5) + (idade * 10)
 
         resposta = f"Análise concluída! Com base no seu perfil, seu limite aprovado é R$ {limite:,.2f}."
-    except:
-        resposta = "Erro ao processar os dados. Tente novamente."
+    except Exception as e:
+        # Imprime o erro completo no console do servidor (Heroku, Render, etc.)
+        print("--- ERRO NO WEBHOOK ---")
+        traceback.print_exc()
+        print("-----------------------")
+        
+        # Mensagem amigável de retorno para o usuário final
+        resposta = f"Erro ao processar os dados: {str(e)}. Tente novamente."
 
     return jsonify({"fulfillmentText": resposta})
 
